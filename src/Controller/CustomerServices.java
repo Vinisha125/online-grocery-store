@@ -10,20 +10,32 @@ public class CustomerServices {
 	
 	Scanner sc= new Scanner(System.in);
 	ArrayList<Customer> customers= new ArrayList();
+	private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+        private static final String NAME_PATTERN = "^[A-Za-z\\s]+$";
 	
 	public void register(){
 		Customer custDetails= new Customer();
 		System.out.println("Enter your Name");
 		String name = sc.next();
+		if (!Pattern.matches(NAME_PATTERN, name)) {
+                System.out.println("Invalid name.");
+        }
 		
 		System.out.println("Enter your phone number");
 		long ph = sc.nextLong();
 		
 		System.out.println("Enter your Email");
 		String em = sc.next();
+		if (!Pattern.matches(EMAIL_PATTERN, em)) {
+               System.out.println("Invalid email");
+        }
 		
 		System.out.println("Enter your Password");
 		String psw = sc.next();
+		if (!Pattern.matches(PASSWORD_PATTERN, psw)) {
+               System.out.println("Weak password");
+        }
 		
 		System.out.println("Confirm Password");
 		String cnf = sc.next();
@@ -48,8 +60,15 @@ public class CustomerServices {
 		Customer customer= new Customer();
 		System.out.println("Enter your registered email:");
 		String email = sc.next();
+		if (!Pattern.matches(EMAIL_PATTERN, email)) {
+                System.out.println("Invalid email");
+        }
 		System.out.println("Enter your password");
 		String psw = sc.next();
+		if (!Pattern.matches(PASSWORD_PATTERN, psw)) {
+               System.out.println("Weak password. Password update skipped.");
+        }
+        
 		
 		for(int i=0;i<customers.size();i++){
 			if (email == customers.get(i).getEmail()){
@@ -95,10 +114,15 @@ public class CustomerServices {
 		
 	}
 	
-	private void logout() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void logout(int i) {
+        Customer customer = customers.get(i);
+        if (customer.isLoggedIn()) {
+            customer.setLoggedIn(false);
+            System.out.println(customer.getName() + " logged out successfully.");
+        } else {
+            System.out.println("No user is currently logged in.");
+        }
+    }
 	public void activate(){
 		System.out.println("Enter you id");
 		int userId= sc.nextInt();
@@ -125,10 +149,19 @@ public class CustomerServices {
 		int id = sc.nextInt();
 		System.out.println("Enter your updated name");
 		String upname = sc.next();
+		if (!Pattern.matches(NAME_PATTERN, upname)) {
+            System.out.println("Invalid name. Name update skipped.");
+        }
 		System.out.println("Enter your updated email");
 		String upem = sc.next();
+		if (!Pattern.matches(EMAIL_PATTERN, upem)) {
+            System.out.println("Invalid email. Email update skipped.");
+        }
 		System.out.println("Enter your updated password");
 		String uppsw = sc.nextLine();
+		if (!Pattern.matches(PASSWORD_PATTERN, uppsw)) {
+            System.out.println("Weak password. Password update skipped.");
+        }
 		System.out.println("Enter your updated phone");
 		Long upph = sc.nextLong();
 		System.out.println("Enter you updated address");
@@ -136,13 +169,13 @@ public class CustomerServices {
 		
 		for (int i = 0; i<customers.size(); i++){
 			if(customers.get(i).getCustomerId() == id){
-				if(upname != ""){
+				if(upname != "" && Pattern.matches(NAME_PATTERN, upname){
 					customers.get(i).setName(upname);
 				}
-				if(upem != ""){
+				if(upem != "" && Pattern.matches(EMAIL_PATTERN, upem){
 					customers.get(i).setEmail(upem);
 				}
-				if(uppsw != ""){
+				if(uppsw != "" && Pattern.matches(PASSWORD_PATTERN, uppsw){
 					customers.get(i).setPassword(uppsw);
 				}
 				if(upph != null){
